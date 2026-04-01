@@ -1,4 +1,4 @@
-// Copyright © 2006-2010 Travis Robinson. All rights reserved.
+// Copyright ï¿½ 2006-2010 Travis Robinson. All rights reserved.
 // 
 // website: http://sourceforge.net/projects/libusbdotnet
 // e-mail:  libusbdotnet@gmail.com
@@ -22,7 +22,6 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Windows.Forms;
 using LibUsbDotNet.Internal;
 using LibUsbDotNet.Main;
 
@@ -214,9 +213,9 @@ namespace LibUsbDotNet
                     if (eReturn != ErrorCode.IoTimedOut) break;
                 }
             }
-            catch (ThreadAbortException)
+            catch (Exception ex) when (ex is OperationCanceledException || ex is ThreadInterruptedException)
             {
-                UsbError.Error(ErrorCode.ReceiveThreadTerminated,0, "ReadData:Read thread aborted.", reader);
+                UsbError.Error(ErrorCode.ReceiveThreadTerminated, 0, "ReadData:Read thread aborted.", reader);
             }
             finally
             {
@@ -235,25 +234,15 @@ namespace LibUsbDotNet
             mReadThread = new Thread(ReadData);
             mReadThread.Priority = ReadThreadPriority;
             mReadThread.Start(TransferContext);
-            Thread.Sleep(1);
-            Application.DoEvents();
         }
 
         private bool StopReadThread()
         {
             Abort();
-            Thread.Sleep(1);
-            Application.DoEvents();
-            DateTime dtStart = DateTime.Now;
-            while (mReadThread.IsAlive && ((DateTime.Now - dtStart).TotalSeconds < 5)) // 5 sec fail-safe
+            bool finished = mReadThread.Join(TimeSpan.FromSeconds(5));
+            if (!finished)
             {
-                Thread.Sleep(100);
-                Application.DoEvents();
-            }
-            if (mReadThread.IsAlive)
-            {
-                UsbError.Error(ErrorCode.ReceiveThreadTerminated,0, "Failed stopping read thread.", this);
-                mReadThread.Abort();
+                UsbError.Error(ErrorCode.ReceiveThreadTerminated, 0, "Failed stopping read thread.", this);
                 return false;
             }
             return true;

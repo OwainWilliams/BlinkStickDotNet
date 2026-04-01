@@ -1,4 +1,4 @@
-// Copyright © 2006-2010 Travis Robinson. All rights reserved.
+// Copyright ï¿½ 2006-2010 Travis Robinson. All rights reserved.
 // 
 // website: http://sourceforge.net/projects/libusbdotnet
 // e-mail:  libusbdotnet@gmail.com
@@ -66,8 +66,10 @@ namespace LibUsbDotNet.Main
             lock (mLockSetupApiRegistry)
             {
                 if (NeedsRefresh) BuildMasterList();
+#if WINDOWS_TESTING
                 if (usbDevice is MonoUsbDevice && !Helper.IsLinux)
                     return FillWindowsMonoUsbDeviceRegistry(usbRegistry, (MonoUsbDevice) usbDevice);
+#endif
                 
                 string fakeHwId = LegacyUsbRegistry.GetRegistryHardwareID((ushort) usbDevice.Info.Descriptor.VendorID,
                                                                           (ushort) usbDevice.Info.Descriptor.ProductID,
@@ -93,7 +95,8 @@ namespace LibUsbDotNet.Main
             }
         }
 
-        private static bool FillWindowsMonoUsbDeviceRegistry(UsbRegistry usbRegistry, MonoUsbDevice usbDevice) 
+#if WINDOWS_TESTING
+        private static bool FillWindowsMonoUsbDeviceRegistry(UsbRegistry usbRegistry, MonoUsbDevice usbDevice)
         {
             MonoLibUsb.MonoUsbApi.internal_windows_device_priv priv = MonoLibUsb.MonoUsbApi.GetWindowsPriv(usbDevice.Profile.ProfileHandle);
             string path;
@@ -120,6 +123,7 @@ namespace LibUsbDotNet.Main
             }
             return bFound;
         }
+#endif
 
         public static void BuildMasterList()
         {
@@ -164,7 +168,7 @@ namespace LibUsbDotNet.Main
                 {
                     Guid g = new Guid(s);
                     List<string> devicePathList;
-                    if (WinUsb.WinUsbRegistry.GetDevicePath(g, out devicePathList))
+                    if (WinUsb.WinUsbRegistry.GetDevicePathList(g, out devicePathList))
                     {
                         deviceItem.DevicePaths.Add(g, devicePathList);
                     }

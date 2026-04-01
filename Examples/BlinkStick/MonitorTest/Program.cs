@@ -1,7 +1,7 @@
 ﻿using System;
 using BlinkStickDotNet;
-using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace MonitorTest
 {
@@ -36,11 +36,8 @@ namespace MonitorTest
 
 			Console.WriteLine ("Monitoring for BlinkStick devices... Press any key to exit.");
 
-			//Start application event loop. Alternatively you can run main form:
-			//   Application.Run ([Your form]);
 			while (true) {
-				//Process messages
-				Application.DoEvents ();
+				Thread.Sleep(50);
 
 				//Exit if key is pressed
 				if (Console.KeyAvailable)

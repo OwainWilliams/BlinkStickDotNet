@@ -1,4 +1,4 @@
-// Copyright © 2006-2010 Travis Robinson. All rights reserved.
+// Copyright ï¿½ 2006-2010 Travis Robinson. All rights reserved.
 // 
 // website: http://sourceforge.net/projects/libusbdotnet
 // e-mail:  libusbdotnet@gmail.com
@@ -23,7 +23,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace LibUsbDotNet.Main
 {
@@ -247,8 +246,7 @@ namespace LibUsbDotNet.Main
         /// <returns>A pre-loaded <see cref="UsbDeviceFinder"/> instance.</returns>
         public static UsbDeviceFinder Load(Stream deviceFinderStream)
         {
-            BinaryFormatter formatter = new BinaryFormatter();
-            return formatter.Deserialize(deviceFinderStream) as UsbDeviceFinder;
+            throw new NotSupportedException("BinaryFormatter serialization is not supported on .NET Core.");
         }
 
         /// <summary>
@@ -258,8 +256,7 @@ namespace LibUsbDotNet.Main
         /// <param name="outStream"></param>
         public static void Save(UsbDeviceFinder usbDeviceFinder, Stream outStream)
         {
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(outStream, usbDeviceFinder);
+            throw new NotSupportedException("BinaryFormatter serialization is not supported on .NET Core.");
         }
 
         /// <summary>

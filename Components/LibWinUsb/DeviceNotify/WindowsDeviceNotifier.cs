@@ -1,34 +1,33 @@
-// Copyright © 2006-2010 Travis Robinson. All rights reserved.
-// 
+// Copyright Â© 2006-2010 Travis Robinson. All rights reserved.
+//
 // website: http://sourceforge.net/projects/libusbdotnet
 // e-mail:  libusbdotnet@gmail.com
-// 
+//
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
-// Free Software Foundation; either version 2 of the License, or 
+// Free Software Foundation; either version 2 of the License, or
 // (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful, but 
+//
+// This program is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 // or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 // for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
-// 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. or 
+// 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. or
 // visit www.gnu.org.
-// 
-// 
+//
+//
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using LibUsbDotNet.DeviceNotify.Internal;
 
 namespace LibUsbDotNet.DeviceNotify
 {
     /// <summary>
-    /// Notifies an application of a change to the hardware Configuration of a device or 
+    /// Notifies an application of a change to the hardware Configuration of a device or
     /// the computer. See <see cref="IDeviceNotifier"/> or <see cref="DeviceNotifier.OpenDeviceNotifier"/> interface for more information
     /// </summary>
     /// <remarks>
@@ -79,7 +78,7 @@ namespace LibUsbDotNet.DeviceNotify
         internal static extern bool UnregisterDeviceNotification(IntPtr handle);
 
         ///<summary>
-        ///Releases the resources associated with this window. 
+        ///Releases the resources associated with this window.
         ///</summary>
         ///
         ~WindowsDeviceNotifier()
@@ -109,7 +108,7 @@ namespace LibUsbDotNet.DeviceNotify
         }
 
 
-        private void OnDeviceChange(ref Message m)
+        private void OnDeviceChange(ref DevNotifyNativeWindow.FakeMessage m)
         {
             if (!mEnabled) return;
             if (m.LParam.ToInt32() != 0)

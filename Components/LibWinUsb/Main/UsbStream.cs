@@ -23,7 +23,6 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Windows.Forms;
 
 namespace LibUsbDotNet.Main
 {
@@ -148,11 +147,11 @@ namespace LibUsbDotNet.Main
         {
             get
             {
-                if (ReferenceEquals(mWaitThread,null))
-                    mWaitThread=new Thread(AsyncTransferFn);
-                
-                while (mWaitThread.IsAlive)Application.DoEvents();
-                
+                if (ReferenceEquals(mWaitThread, null))
+                    mWaitThread = new Thread(AsyncTransferFn);
+
+                mWaitThread.Join();
+
                 return mWaitThread;
             }
         }
