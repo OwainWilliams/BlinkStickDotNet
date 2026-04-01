@@ -11,11 +11,31 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Deterministic>false</Deterministic>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageId>BlinkStickDotNet</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Agile Innovative Ltd</Authors>
+    <Description>BlinkStick .NET library for controlling BlinkStick USB LED devices.</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Components\HidSharp\HidSharp.csproj" />
-    <ProjectReference Include="..\Components\LibWinUsb\LibUsbDotNet.csproj" />
+    <ProjectReference Include="..\Components\HidSharp\HidSharp.csproj">
+      <PrivateAssets>all</PrivateAssets>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\Components\LibWinUsb\LibUsbDotNet.csproj">
+      <PrivateAssets>all</PrivateAssets>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
+
+  <!-- Bundle the component DLLs inside the nupkg so consumers need no extra dependencies -->
+  <Target Name="AddComponentDllsToPackage" BeforeTargets="_GetPackageFiles">
+    <ItemGroup>
+      <_ComponentDlls Include="$(OutputPath)HidSharp.dll" />
+      <_ComponentDlls Include="$(OutputPath)LibUsbDotNet.dll" />
+      <None Include="@(_ComponentDlls)" Pack="true" PackagePath="lib\net10.0-windows7.0" Visible="false" />
+    </ItemGroup>
+  </Target>
 
 </Project>
